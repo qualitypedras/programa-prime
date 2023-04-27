@@ -111,6 +111,16 @@
               "src/**/*.html"
             ]
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "sakai-ng:build:production",
+            "firebaseProject": "programa-bf934",
+            "firebaseHostingSite": "programa-bf934"
+          }
         }
       }
     }

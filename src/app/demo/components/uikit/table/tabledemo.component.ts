@@ -12,10 +12,9 @@ interface expandedRows {
 
 @Component({
     templateUrl: './tabledemo.component.html',
-    providers: [MessageService, ConfirmationService]
+    providers: [MessageService, ConfirmationService],
 })
 export class TableDemoComponent implements OnInit {
-
     customers1: Customer[] = [];
 
     customers2: Customer[] = [];
@@ -46,19 +45,28 @@ export class TableDemoComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor(private customerService: CustomerService, private productService: ProductService) { }
+    constructor(
+        private customerService: CustomerService,
+        private productService: ProductService
+    ) {}
 
     ngOnInit() {
-        this.customerService.getCustomersLarge().then(customers => {
+        this.customerService.getCustomersLarge().then((customers) => {
             this.customers1 = customers;
             this.loading = false;
 
             // @ts-ignore
-            this.customers1.forEach(customer => customer.date = new Date(customer.date));
+            this.customers1.forEach((customer) => (customer.date = new Date()));
         });
-        this.customerService.getCustomersMedium().then(customers => this.customers2 = customers);
-        this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
-        this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
+        this.customerService
+            .getCustomersMedium()
+            .then((customers) => (this.customers2 = customers));
+        this.customerService
+            .getCustomersLarge()
+            .then((customers) => (this.customers3 = customers));
+        this.productService
+            .getProductsWithOrdersSmall()
+            .then((data) => (this.products = data));
 
         this.representatives = [
             { name: 'Amy Elsner', image: 'amyelsner.png' },
@@ -70,7 +78,7 @@ export class TableDemoComponent implements OnInit {
             { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
             { name: 'Onyama Limba', image: 'onyamalimba.png' },
             { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-            { name: 'XuXue Feng', image: 'xuxuefeng.png' }
+            { name: 'XuXue Feng', image: 'xuxuefeng.png' },
         ];
 
         this.statuses = [
@@ -79,7 +87,7 @@ export class TableDemoComponent implements OnInit {
             { label: 'New', value: 'new' },
             { label: 'Negotiation', value: 'negotiation' },
             { label: 'Renewal', value: 'renewal' },
-            { label: 'Proposal', value: 'proposal' }
+            { label: 'Proposal', value: 'proposal' },
         ];
     }
 
@@ -96,16 +104,21 @@ export class TableDemoComponent implements OnInit {
                 const representativeName = rowData?.representative?.name || '';
 
                 if (i === 0) {
-                    this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-                }
-                else {
+                    this.rowGroupMetadata[representativeName] = {
+                        index: 0,
+                        size: 1,
+                    };
+                } else {
                     const previousRowData = this.customers3[i - 1];
-                    const previousRowGroup = previousRowData?.representative?.name;
+                    const previousRowGroup =
+                        previousRowData?.representative?.name;
                     if (representativeName === previousRowGroup) {
                         this.rowGroupMetadata[representativeName].size++;
-                    }
-                    else {
-                        this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+                    } else {
+                        this.rowGroupMetadata[representativeName] = {
+                            index: i,
+                            size: 1,
+                        };
                     }
                 }
             }
@@ -114,8 +127,11 @@ export class TableDemoComponent implements OnInit {
 
     expandAll() {
         if (!this.isExpanded) {
-            this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
-
+            this.products.forEach((product) =>
+                product && product.name
+                    ? (this.expandedRows[product.name] = true)
+                    : ''
+            );
         } else {
             this.expandedRows = {};
         }
@@ -123,16 +139,21 @@ export class TableDemoComponent implements OnInit {
     }
 
     formatCurrency(value: number) {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        return value.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
     }
 
     onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
     }
 
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    
 }
